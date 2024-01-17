@@ -9,7 +9,6 @@ RUN apt update && \
         libfreetype6-dev \
         libmcrypt-dev \
         libjpeg-dev \
-        npm \
         git \
         unzip \
         jq && \
