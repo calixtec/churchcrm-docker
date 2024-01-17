@@ -5,13 +5,14 @@
 version: "3.6"
 
 services:
-
   database: #Name of DB Host
     container_name: database
     image: mariadb
     env_file:
       - .env
     restart: always
+    volumes:
+      - churchcrm-db:/var/lib/mysql
 
   redis:
     container_name: redis
@@ -24,12 +25,23 @@ services:
 
   churchcrm:
     container_name: churchcrm
-    build: ./Dockerfile
+    build: ./
     ports:
-      - "80:80"
+      - "8080:80"
     env_file:
       - .env
     depends_on:
       - database
       - redis
     restart: always
+    volumes:
+      - churchcrm-files:/var/www/html/Images
+      - churchcrm-files:/var/www/html/Reports
+      - churchcrm-files:/var/www/html/Include
+      - churchcrm-files:/var/www/html/logs
+
+volumes:
+  churchcrm-files:
+    driver: local
+  churchcrm-db:
+    driver: local
