@@ -35,10 +35,7 @@ services:
       - redis
     restart: always
     volumes:
-      - churchcrm-files:/var/www/html/Images
-      - churchcrm-files:/var/www/html/Reports
-      - churchcrm-files:/var/www/html/Include
-      - churchcrm-files:/var/www/html/logs
+      - churchcrm-files:/var/www/html
 
 volumes:
   churchcrm-files:

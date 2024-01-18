@@ -1,4 +1,10 @@
+# syntax=docker/dockerfile:1
 FROM php:8-apache
+
+LABEL AUTHOR="Léo Carvalho" \
+    io.churchcrm.version="3.0.0" \
+    io.churchcrm.release-date="2021-10-01" \
+    io.churchcrm.version.is-production="true"
 
 RUN apt update && \
     apt install -y \
@@ -35,11 +41,9 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" && \
     mkdir -p /etc/run_always
 
 COPY 60-churchcrm /etc/run_always
+COPY src/index.php /tmp
 
 RUN chmod +x /etc/run_always/60-churchcrm
-
-# Enable Terminal
-# ENV TERM xterm
 
 EXPOSE 80
 

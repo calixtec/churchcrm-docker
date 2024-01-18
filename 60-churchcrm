@@ -1,34 +1,14 @@
 #!/bin/bash
 set +e
 
+if [ ! -f /var/www/html/index.php ]; then
+  cp /tmp/index.php /var/www/html/index.php
+  chown www-data:www-data /var/www/html
+fi
+
 # populate /web/html if empty
 if [ ! -d /var/www/html ]; then
   mkdir -p /var/www/html
-  chown -R www-data:www-data /var/www/html
-fi
-
-if [ ! -f /var/www/html/Include/Config.php ]; then
-  cd /tmp
-  curl -sOL "$(jq -r ".assets[] | .browser_download_url" < <( curl -s "https://api.github.com/repos/churchCRM/CRM/releases/135772497" ))"
-  unzip -q *.zip
-  cp -Rp ./churchcrm/. /var/www/html
-  rm -R churchcrm
-
-  # Since we've already set these passwords in the env file, lets just go ahead and put them in the database and skip the setup page.
-  cp /var/www/html/Include/Config.php.example /var/www/html/Include/Config.php
-
-  SALT=`head /dev/urandom | LC_CTYPE=C tr -dc "[:alnum:]" | head -c 60 ; echo ''`
-
-  sed -i "s/ChangeThisToASecureRandomStringBeforeUse/$SALT/g" /var/www/html/Include/Config.php
-  sed -i 's/#$TwoFASecretKey/$TwoFASecretKey/g' /var/www/html/Include/Config.php
-  sed -i "s/||DB_SERVER_NAME||/$MYSQL_DB_HOST/g" /var/www/html/Include/Config.php
-  sed -i "s/||DB_SERVER_PORT||/$MYSQL_PORT/g" /var/www/html/Include/Config.php
-  sed -i "s/||DB_NAME||/$MYSQL_DATABASE/g" /var/www/html/Include/Config.php
-  sed -i "s/||DB_USER||/$MYSQL_USER/g" /var/www/html/Include/Config.php
-  sed -i "s/||DB_PASSWORD||/$MYSQL_PASSWORD/g" /var/www/html/Include/Config.php
-  sed -i "s/||URL||//g" /var/www/html/Include/Config.php
-  sed -i "s/||ROOT_PATH||//g" /var/www/html/Include/Config.php
-
   chown -R www-data:www-data /var/www/html
 fi
 
@@ -41,7 +21,29 @@ if [ "$SESSION_SAVE_HANDLER" == "redis" ]; then
   sed -i 's/^session.save_handler.*$/session.save_handler = redis/g' $PHP_INI_DIR/php.ini
   sed -i "s|^session.save_path.*$|session.save_path=\"${REDIS_URL}\"|g" $PHP_INI_DIR/php.ini
   sed -i "s|^;session.save_path.*$|session.save_path=\"${REDIS_URL}\"|g" $PHP_INI_DIR/php.ini
-
 fi
+
+cd /tmp
+curl -sOL "$(jq -r ".assets[] | .browser_download_url" < <( curl -s "https://api.github.com/repos/churchCRM/CRM/releases/135772497" ))"
+unzip -q *.zip
+cp -Rp ./churchcrm/. /var/www/html
+rm -R churchcrm
+
+# Since we've already set these passwords in the env file, lets just go ahead and put them in the database and skip the setup page.
+cp /var/www/html/Include/Config.php.example /var/www/html/Include/Config.php
+
+SALT=`head /dev/urandom | LC_CTYPE=C tr -dc "[:alnum:]" | head -c 60 ; echo ''`
+
+sed -i "s/ChangeThisToASecureRandomStringBeforeUse/$SALT/g" /var/www/html/Include/Config.php
+sed -i 's/#$TwoFASecretKey/$TwoFASecretKey/g' /var/www/html/Include/Config.php
+sed -i "s/||DB_SERVER_NAME||/$MYSQL_DB_HOST/g" /var/www/html/Include/Config.php
+sed -i "s/||DB_SERVER_PORT||/$MYSQL_PORT/g" /var/www/html/Include/Config.php
+sed -i "s/||DB_NAME||/$MYSQL_DATABASE/g" /var/www/html/Include/Config.php
+sed -i "s/||DB_USER||/$MYSQL_USER/g" /var/www/html/Include/Config.php
+sed -i "s/||DB_PASSWORD||/$MYSQL_PASSWORD/g" /var/www/html/Include/Config.php
+sed -i "s/||URL||//g" /var/www/html/Include/Config.php
+sed -i "s/||ROOT_PATH||//g" /var/www/html/Include/Config.php
+
+chown -R www-data:www-data /var/www/html
 
 docker-php-entrypoint apache2-foreground

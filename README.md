@@ -50,3 +50,9 @@ If you can, pay him a coffee and try to help ChurchCRM project with something (l
 ## License
 
 Following original repo of ChurchCRM, this repo has MIT License. You can [read the license here](LICENSE).
+
+--
+
+## Known issues
+
+- using `docker-compose` makes UI of app shows lack of `integrityCheck.json` file. This error doesn't occur using only `Dockerfile`, so I need to investigate better.
