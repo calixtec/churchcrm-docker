@@ -29,19 +29,20 @@ unzip -q *.zip
 cp -Rp ./churchcrm/. /var/www/html
 rm -R churchcrm
 
-# Since we've already set these passwords in the env file, lets just go ahead and put them in the database and skip the setup page.
-cp /var/www/html/Include/Config.php.example /var/www/html/Include/Config.php
+if [ ! -f /var/www/html/Include/Config.php ]; then
+  # Since we've already set these passwords in the env file, lets just go ahead and put them in the database and skip the setup page.
+  cp /var/www/html/Include/Config.php.example /var/www/html/Include/Config.php
 
-sed -i "s/ChangeThisToASecureRandomStringBeforeUse/$CHURCHCRM_2FA_SECRET/g" /var/www/html/Include/Config.php
-sed -i 's/#$TwoFASecretKey/$TwoFASecretKey/g' /var/www/html/Include/Config.php
-sed -i "s/||DB_SERVER_NAME||/$MYSQL_DB_HOST/g" /var/www/html/Include/Config.php
-sed -i "s/||DB_SERVER_PORT||/$MYSQL_PORT/g" /var/www/html/Include/Config.php
-sed -i "s/||DB_NAME||/$MYSQL_DATABASE/g" /var/www/html/Include/Config.php
-sed -i "s/||DB_USER||/$MYSQL_USER/g" /var/www/html/Include/Config.php
-sed -i "s/||DB_PASSWORD||/$MYSQL_PASSWORD/g" /var/www/html/Include/Config.php
-sed -i "s/||URL||//g" /var/www/html/Include/Config.php
-sed -i "s/||ROOT_PATH||//g" /var/www/html/Include/Config.php
-
+  sed -i "s/ChangeThisToASecureRandomStringBeforeUse/$CHURCHCRM_2FA_SECRET/g" /var/www/html/Include/Config.php
+  sed -i 's/#$TwoFASecretKey/$TwoFASecretKey/g' /var/www/html/Include/Config.php
+  sed -i "s/||DB_SERVER_NAME||/$MYSQL_DB_HOST/g" /var/www/html/Include/Config.php
+  sed -i "s/||DB_SERVER_PORT||/$MYSQL_PORT/g" /var/www/html/Include/Config.php
+  sed -i "s/||DB_NAME||/$MYSQL_DATABASE/g" /var/www/html/Include/Config.php
+  sed -i "s/||DB_USER||/$MYSQL_USER/g" /var/www/html/Include/Config.php
+  sed -i "s/||DB_PASSWORD||/$MYSQL_PASSWORD/g" /var/www/html/Include/Config.php
+  sed -i "s/||URL||//g" /var/www/html/Include/Config.php
+  sed -i "s/||ROOT_PATH||//g" /var/www/html/Include/Config.php
+fi
 chown -R www-data:www-data /var/www/html
 
 docker-php-entrypoint apache2-foreground
