@@ -16,7 +16,8 @@ RUN apt update && \
         libjpeg-dev \
         git \
         unzip \
-        jq && \
+        jq \
+        locales && \
     apt dist-upgrade -y && \
     apt clean && \
     apt autoremove && \
@@ -37,6 +38,11 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" && \
     sed -i 's/^post_max_size.*$/post_max_size = 8M/g' $PHP_INI_DIR/php.ini && \
     sed -i 's/^memory_limit.*$/memory_limit = 32M/g' $PHP_INI_DIR/php.ini && \
     sed -i 's/^max_execution_time.*$/max_execution_time = 120/g' $PHP_INI_DIR/php.ini && \
+    sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen && \
+    sed -i 's/^# *\(pt_BR.UTF-8\)/\1/' /etc/locale.gen && \
+    sed -i 's/^# *\(pt_PT.UTF-8\)/\1/' /etc/locale.gen && \
+    sed -i 's/^# *\(fr_FR.UTF-8\)/\1/' /etc/locale.gen && \
+    locale-gen && \
     mkdir -p /etc/run_always
 
 COPY 60-churchcrm /etc/run_always
