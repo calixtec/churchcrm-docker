@@ -24,7 +24,7 @@ if [ "$SESSION_SAVE_HANDLER" == "redis" ]; then
 fi
 
 cd /tmp
-curl -sOL "$(jq -r ".assets[] | .browser_download_url" < <( curl -s "https://api.github.com/repos/churchCRM/CRM/releases/assets/146429535" ))"
+curl -sOL "$(jq -r ".browser_download_url" < <( curl -s "https://api.github.com/repos/churchCRM/CRM/releases/assets/146429535" ))"
 unzip -q *.zip
 cp -Rp ./churchcrm/. /var/www/html
 rm -R churchcrm
