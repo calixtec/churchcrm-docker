@@ -21,6 +21,10 @@ docker-compose build
 docker-compose up
 ```
 
+## Versioning
+
+The tags used here follow the same version from ChurchCRM. So, if you want to use ChurchCRM v5.4.3, you'll need to pull image tagged as 5.4.3. The most recent version tagged here is also tagged as `latest`, making our lifes easier.
+
 ## Structure
 
 `docker-compose.yml`: This file defines the Docker services, networks, and volumes. It includes the ChurchCRM application, a MariaDB database, and a Redis instance for session handling.
@@ -45,13 +49,13 @@ Please ensure to use secure, random passwords in the `.env` file for production 
 
 This repo is based on work of original work from [@DawoudIO](https://github.com/DawoudIO), on original repo for [ChurchCRM Docker](https://github.com/ChurchCRM/Docker). All I done here it's only update and improve his original work.
 
-If you can, pay him a coffee and try to help ChurchCRM project with something (like translations, documentation, etc).
+If you can, pay them a coffee and try to help ChurchCRM project with something (like translations, documentation, etc).
 
 ## License
 
 Following original repo of ChurchCRM, this repo has MIT License. You can [read the license here](LICENSE).
 
---
+---
 
 ## Known issues
 
