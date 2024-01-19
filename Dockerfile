@@ -1,9 +1,16 @@
 FROM php:8-apache
 
 LABEL AUTHOR="Léo Carvalho" \
-    io.churchcrm.version="3.0.0" \
-    io.churchcrm.release-date="2021-10-01" \
-    io.churchcrm.version.is-production="true"
+    io.churchcrm.version="5.5.0" \
+    org.opencontainers.image.version="5.5.0" \
+    org.opencontainers.image.created="2024-01-19T22:31:00-3" \
+    org.opencontainers.image.url="https://hub.docker.com/r/carvalholeo/churchcrm" \
+    org.opencontainers.image.source="https://github.com/carvalholeo/churchcrm-docker" \
+    org.opencontainers.image.revision="1" \
+    org.opencontainers.image.vendor="Léo Carvalho" \
+    org.opencontainers.image.title="ChurchCRM" \
+    org.opencontainers.image.description="ChurchCRM is a free church management platform. Manage your congragation's information, online and in person giving, groups, church, sunday school attendance and much more." \
+    org.opencontainers.image.licenses="MIT"
 
 RUN apt update && \
     apt install -y \
